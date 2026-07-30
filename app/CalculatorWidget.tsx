@@ -1,4 +1,3 @@
-// src/app/CalculatorWidget.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -99,7 +98,7 @@ export default function CalculatorWidget() {
 
   return (
     <div className="w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 transition-colors">
-      {/* Дискретна лента със знаци за доверие горе в уиджета */}
+      {/* Дискретна лента със знаци за доверие */}
       <div className="bg-gray-50 border-b border-gray-100 py-3 px-6 flex flex-wrap items-center justify-center gap-4 text-xs text-gray-500 font-medium">
         <span className="inline-flex items-center gap-1.5">
           <ShieldCheck size={15} className="text-emerald-500" />
@@ -157,7 +156,7 @@ export default function CalculatorWidget() {
             </button>
           </div>
 
-          <div>
+          <div className="pt-2">
             <label className="block text-gray-700 font-bold mb-3 text-base">
               {calcMode === "grossToNet"
                 ? "Твоята брутна заплата"
@@ -172,43 +171,15 @@ export default function CalculatorWidget() {
                 className="w-full text-4xl font-black text-gray-900 border-b-4 border-blue-200 focus:border-blue-600 outline-none pb-2 bg-transparent transition-colors"
                 placeholder="0"
                 min="0"
-                inputMode="numeric"
-                pattern="[0-9]*"
+                step="any"
+                inputMode="decimal"
               />
               <span className="absolute right-0 bottom-4 text-gray-400 font-bold text-xl">
                 EUR
               </span>
             </div>
 
-            <div className="mt-6">
-              <input
-                type="range"
-                min={
-                  calcMode === "grossToNet"
-                    ? currentConfig.MIN_WAGE
-                    : currentConfig.MIN_WAGE * 0.77
-                }
-                max="5000"
-                step="50"
-                value={Number(inputValue) || 0}
-                onChange={(e) => setInputValue(e.target.value)}
-                className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-              />
-              <div className="flex justify-between text-xs text-gray-400 mt-2 font-medium">
-                <span>
-                  Мин. (
-                  {Math.round(
-                    calcMode === "grossToNet"
-                      ? currentConfig.MIN_WAGE
-                      : currentConfig.MIN_WAGE * 0.77,
-                  )}{" "}
-                  €)
-                </span>
-                <span>5 000+ €</span>
-              </div>
-            </div>
-
-            <div className="mt-6 bg-gray-50 px-4 py-3 rounded-xl border border-gray-100 transition-colors">
+            <div className="mt-8 bg-gray-50 px-4 py-3 rounded-xl border border-gray-100 transition-colors">
               <label className="flex items-center gap-3 cursor-pointer">
                 <div className="relative flex items-center">
                   <input
@@ -221,7 +192,7 @@ export default function CalculatorWidget() {
                 </div>
                 <span className="text-xs md:text-sm font-bold text-gray-700 flex items-center gap-2">
                   <Building2 size={15} className="text-blue-500" />
-                  Колко реално струваш на твоя работодател?
+                  Колко реално струваш на работодателя?
                 </span>
               </label>
             </div>
@@ -282,8 +253,10 @@ export default function CalculatorWidget() {
                     {result.gross.toFixed(2)} €
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-500">Осигуровки (Служител):</span>
+                
+                {/* Главен ред за общи осигуровки */}
+                <div className="flex justify-between items-center mt-1">
+                  <span className="text-gray-500">Общо осигуровки:</span>
                   <span className="font-bold text-orange-500">
                     -{" "}
                     {(
@@ -294,7 +267,24 @@ export default function CalculatorWidget() {
                     €
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
+                
+                {/* Детайлна разбивка с отстъп */}
+                <div className="pl-3 mt-1.5 mb-2.5 space-y-1.5 text-xs text-gray-500 border-l-[1.5px] border-gray-200">
+                  <div className="flex justify-between">
+                    <span>ДОО (Фонд Пенсии) <span className="text-[10px] text-gray-400 ml-1">8.38%</span></span>
+                    <span>{result.employeeTaxes.doo.toFixed(2)} €</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>ДЗПО (Универсален) <span className="text-[10px] text-gray-400 ml-1">2.20%</span></span>
+                    <span>{result.employeeTaxes.dzpo.toFixed(2)} €</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Здравно осигуряване <span className="text-[10px] text-gray-400 ml-1">3.20%</span></span>
+                    <span>{result.employeeTaxes.health.toFixed(2)} €</span>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center pt-1">
                   <span className="text-gray-500">Данък ДОД (10%):</span>
                   <span className="font-bold text-red-500">
                     - {result.employeeTaxes.incomeTax.toFixed(2)} €

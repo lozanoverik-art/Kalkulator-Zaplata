@@ -1,4 +1,3 @@
-// src/app/page.tsx
 "use client";
 
 import CalculatorWidget from "./CalculatorWidget";
@@ -28,11 +27,6 @@ export default function Home() {
             </span>{" "}
             с пълна детайлност.
           </h1>
-          {/* <p className="text-base md:text-lg text-gray-500 dark:text-gray-400 font-medium">
-            Единственият калкулатор с 10-годишен исторически архив (2016–2026
-            г.), експертен данъчен съветник и мигновени изчисления Бруто към
-            Нето.
-          </p> */}
         </div>
 
         {/* Единствен и мощен уиджет за заплати */}

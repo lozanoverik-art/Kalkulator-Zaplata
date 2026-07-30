@@ -20,7 +20,7 @@ export const TAX_YEARS: Record<number, YearConfig> = {
         year: 2026,
         MIN_WAGE: 620.20, // 1213 лв.
         MAX_INSURABLE_INCOME: 2111.64, // 4130 лв.
-        EMPLOYEE_DOO: 0.1058, 
+        EMPLOYEE_DOO: 0.0838, 
         EMPLOYEE_DZPO: 0.0220, 
         EMPLOYEE_HEALTH: 0.0320, 
         INCOME_TAX: 0.1000,
@@ -32,7 +32,7 @@ export const TAX_YEARS: Record<number, YearConfig> = {
         year: 2025,
         MIN_WAGE: 550.66, // 1077 лв.
         MAX_INSURABLE_INCOME: 2111.64, // 4130 лв.
-        EMPLOYEE_DOO: 0.1058,
+        EMPLOYEE_DOO: 0.0838,
         EMPLOYEE_DZPO: 0.0220,
         EMPLOYEE_HEALTH: 0.0320,
         INCOME_TAX: 0.1000,
@@ -44,7 +44,7 @@ export const TAX_YEARS: Record<number, YearConfig> = {
         year: 2024,
         MIN_WAGE: 477.04, // 933 лв.
         MAX_INSURABLE_INCOME: 1917.34, // 3750 лв.
-        EMPLOYEE_DOO: 0.1058,
+        EMPLOYEE_DOO: 0.0838,
         EMPLOYEE_DZPO: 0.0220,
         EMPLOYEE_HEALTH: 0.0320,
         INCOME_TAX: 0.1000,
@@ -56,7 +56,7 @@ export const TAX_YEARS: Record<number, YearConfig> = {
         year: 2023,
         MIN_WAGE: 398.81, // 780 лв.
         MAX_INSURABLE_INCOME: 1738.39, // 3400 лв.
-        EMPLOYEE_DOO: 0.1058,
+        EMPLOYEE_DOO: 0.0838,
         EMPLOYEE_DZPO: 0.0220,
         EMPLOYEE_HEALTH: 0.0320,
         INCOME_TAX: 0.1000,
@@ -68,7 +68,7 @@ export const TAX_YEARS: Record<number, YearConfig> = {
         year: 2022,
         MIN_WAGE: 363.02, // 710 лв.
         MAX_INSURABLE_INCOME: 1533.88, // 3000 лв.
-        EMPLOYEE_DOO: 0.1058,
+        EMPLOYEE_DOO: 0.0838,
         EMPLOYEE_DZPO: 0.0220,
         EMPLOYEE_HEALTH: 0.0320,
         INCOME_TAX: 0.1000,
@@ -80,7 +80,7 @@ export const TAX_YEARS: Record<number, YearConfig> = {
         year: 2021,
         MIN_WAGE: 332.34, // 650 лв.
         MAX_INSURABLE_INCOME: 1533.88, // 3000 лв.
-        EMPLOYEE_DOO: 0.1058,
+        EMPLOYEE_DOO: 0.0838,
         EMPLOYEE_DZPO: 0.0220,
         EMPLOYEE_HEALTH: 0.0320,
         INCOME_TAX: 0.1000,
@@ -92,7 +92,7 @@ export const TAX_YEARS: Record<number, YearConfig> = {
         year: 2020,
         MIN_WAGE: 311.89, // 610 лв.
         MAX_INSURABLE_INCOME: 1533.88, // 3000 лв.
-        EMPLOYEE_DOO: 0.1058,
+        EMPLOYEE_DOO: 0.0838,
         EMPLOYEE_DZPO: 0.0220,
         EMPLOYEE_HEALTH: 0.0320,
         INCOME_TAX: 0.1000,
@@ -104,7 +104,7 @@ export const TAX_YEARS: Record<number, YearConfig> = {
         year: 2019,
         MIN_WAGE: 286.32, // 560 лв.
         MAX_INSURABLE_INCOME: 1329.36, // 2600 лв.
-        EMPLOYEE_DOO: 0.1058,
+        EMPLOYEE_DOO: 0.0838,
         EMPLOYEE_DZPO: 0.0220,
         EMPLOYEE_HEALTH: 0.0320,
         INCOME_TAX: 0.1000,
@@ -116,7 +116,7 @@ export const TAX_YEARS: Record<number, YearConfig> = {
         year: 2018,
         MIN_WAGE: 260.76, // 510 лв.
         MAX_INSURABLE_INCOME: 1329.36, // 2600 лв.
-        EMPLOYEE_DOO: 0.1058,
+        EMPLOYEE_DOO: 0.0838,
         EMPLOYEE_DZPO: 0.0220,
         EMPLOYEE_HEALTH: 0.0320,
         INCOME_TAX: 0.1000,
@@ -128,7 +128,7 @@ export const TAX_YEARS: Record<number, YearConfig> = {
         year: 2017,
         MIN_WAGE: 235.19, // 460 лв.
         MAX_INSURABLE_INCOME: 1329.36, // 2600 лв.
-        EMPLOYEE_DOO: 0.1058,
+        EMPLOYEE_DOO: 0.0838,
         EMPLOYEE_DZPO: 0.0220,
         EMPLOYEE_HEALTH: 0.0320,
         INCOME_TAX: 0.1000,
@@ -140,7 +140,7 @@ export const TAX_YEARS: Record<number, YearConfig> = {
         year: 2016,
         MIN_WAGE: 214.74, // 420 лв.
         MAX_INSURABLE_INCOME: 1329.36, // 2600 лв.
-        EMPLOYEE_DOO: 0.1058,
+        EMPLOYEE_DOO: 0.0838,
         EMPLOYEE_DZPO: 0.0220,
         EMPLOYEE_HEALTH: 0.0320,
         INCOME_TAX: 0.1000,
