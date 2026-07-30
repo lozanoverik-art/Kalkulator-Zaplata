@@ -38,6 +38,63 @@ export default function Home() {
         {/* Единствен и мощен уиджет за заплати */}
         <CalculatorWidget />
       </div>
+      <section className="max-w-3xl mx-auto mt-16 p-6 sm:p-8 bg-white/80 backdrop-blur-md rounded-2xl shadow-sm border border-gray-100">
+  <h2 className="text-2xl font-bold text-gray-800 mb-6">Често задавани въпроси (FAQ)</h2>
+  
+  <div className="space-y-4">
+    {/* Въпрос 1 */}
+    <details className="group bg-gray-50 rounded-xl [&_summary::-webkit-details-marker]:hidden">
+      <summary className="flex items-center justify-between cursor-pointer p-4 font-semibold text-gray-700">
+        <span>Каква е разликата между брутна и нетна заплата?</span>
+        <span className="transition duration-300 group-open:-rotate-180">
+          <svg fill="none" height="24" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round"></path>
+          </svg>
+        </span>
+      </summary>
+      <div className="p-4 pt-0 text-gray-600 leading-relaxed">
+        <strong>Брутната заплата</strong> е основното възнаграждение, договорено с работодателя, преди да бъдат удържани данъци и осигуровки. <strong>Нетната заплата</strong> (чистата сума) е това, което реално получавате по банковата си сметка след всички задължителни държавни удръжки.
+      </div>
+    </details>
+
+    {/* Въпрос 2 */}
+    <details className="group bg-gray-50 rounded-xl [&_summary::-webkit-details-marker]:hidden">
+      <summary className="flex items-center justify-between cursor-pointer p-4 font-semibold text-gray-700">
+        <span>Какви са удръжките от заплатата през 2026 година?</span>
+        <span className="transition duration-300 group-open:-rotate-180">
+          <svg fill="none" height="24" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round"></path>
+          </svg>
+        </span>
+      </summary>
+      <div className="p-4 pt-0 text-gray-600 leading-relaxed">
+        За сметка на служителя в България се удържат:
+        <ul className="list-disc ml-5 mt-2 space-y-1">
+          <li><strong>ДОД (Данък общ доход):</strong> 10%</li>
+          <li><strong>ДОО (Държавно обществено осигуряване):</strong> около 8.38% (зависи от категорията труд)</li>
+          <li><strong>ДЗПО (Допълнително задължително пенсионно осигуряване):</strong> 2.20%</li>
+          <li><strong>ЗО (Здравно осигуряване):</strong> 3.20%</li>
+        </ul>
+        Нашият калкулатор за заплати автоматично прилага всички актуални ставки на НАП и НОИ за 2026 г.
+      </div>
+    </details>
+
+    {/* Въпрос 3 */}
+    <details className="group bg-gray-50 rounded-xl [&_summary::-webkit-details-marker]:hidden">
+      <summary className="flex items-center justify-between cursor-pointer p-4 font-semibold text-gray-700">
+        <span>Как работи този калкулатор за бруто и нето?</span>
+        <span className="transition duration-300 group-open:-rotate-180">
+          <svg fill="none" height="24" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round"></path>
+          </svg>
+        </span>
+      </summary>
+      <div className="p-4 pt-0 text-gray-600 leading-relaxed">
+        Калкулаторът предлага двупосочно изчисляване. Можете да въведете желаната от вас <strong>нетна сума</strong>, за да разберете каква брутна заплата трябва да поискате на интервю за работа, или да въведете <strong>брутната сума</strong> от трудовия си договор, за да видите точния размер на чистото си възнаграждение.
+      </div>
+    </details>
+  </div>
+</section>
     </main>
   );
 }
