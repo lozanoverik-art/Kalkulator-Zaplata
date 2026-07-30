@@ -17,11 +17,4 @@ input[type="number"] {
   body {
     @apply bg-slate-50 text-slate-900 transition-colors duration-300;
   }
-  
-  /* Когато браузърът или системата е в тъмен режим */
-  @media (prefers-color-scheme: dark) {
-    body {
-      @apply bg-slate-900 text-slate-50;
-    }
-  }
 }
