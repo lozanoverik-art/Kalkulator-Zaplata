@@ -20,6 +20,20 @@ export default function Home() {
           <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-3.5 py-1.5 rounded-full text-xs font-extrabold tracking-wide uppercase border border-blue-200">
             Най-прецизният калкулатор за заплати в България
           </div>
+          <div className="max-w-3xl mx-auto mb-8 px-4 text-center text-gray-600 text-sm md:text-base leading-relaxed">
+            <p>
+              Търсите надежден начин за{" "}
+              <strong>пресмятане на заплата от бруто в нето</strong> или се
+              нуждаете от <strong>обратен калкулатор нето към бруто</strong>?
+              Нашият{" "}
+              <strong>актуален калкулатор бруто нето за 2026 година</strong> ви
+              позволява мигновено и прецизно да изчислите вашите данъци,
+              осигурки и чист доход по официалните нормативи на НАП и НОИ. Чрез
+              вградения <strong>пълен разход за работодател калкулатор</strong>{" "}
+              лесно ще разберете и реалната стойност на трудовия ресурс за
+              бизнеса.
+            </p>
+          </div>
           <h1 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight leading-tight">
             Изчисли своята <span className="text-blue-600">нетна заплата</span>{" "}
             с пълна детайлност.
@@ -388,6 +402,18 @@ export default function Home() {
           }),
         }}
       />
+      <footer className="max-w-3xl mx-auto mt-20 mb-10 px-6 text-center text-gray-400 text-xs leading-relaxed border-t border-gray-100 pt-6">
+        <p className="mb-3">
+          <strong>Калкулатор Заплата</strong> е надежден инструмент за
+          пресмятане на заплата от бруто в нето, обратен калкулатор нето към
+          бруто, осигуровки и пълен разход за работодател по официалните
+          нормативи на НАП и НОИ за 2026 година.
+        </p>
+        <p>
+          © {new Date().getFullYear()} KalkulatorZaplata.com. Всички права
+          запазени. Изчисленията са информационни.
+        </p>
+      </footer>
     </main>
   );
 }
