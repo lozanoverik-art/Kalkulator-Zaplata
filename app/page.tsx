@@ -95,6 +95,33 @@ export default function Home() {
     </details>
   </div>
 </section>
+<script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Каква е разликата между брутна и нетна заплата?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Брутната заплата е основното възнаграждение преди данъци и осигуровки. Нетната заплата (чистата сума) е това, което реално получавате след всички държавни удръжки."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Какви са удръжките от заплатата през 2026 година?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Удръжките включват: 10% ДОД, около 8.38% ДОО, 2.20% ДЗПО и 3.20% Здравно осигуряване за сметка на служителя."
+          }
+        }
+      ]
+    })
+  }}
+/>
     </main>
   );
 }
