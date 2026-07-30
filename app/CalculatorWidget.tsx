@@ -181,7 +181,7 @@ export default function CalculatorWidget() {
             {/* Информационен ред за лимитите на годината */}
             <div className="flex flex-col sm:flex-row sm:justify-between text-[11px] md:text-xs text-gray-400 mt-2.5 font-medium px-1 gap-1">
               <span>
-                Мин. заплата:{" "}
+                Мин. заплата (Бруто):{" "}
                 <strong className="text-gray-500">
                   {Math.round(currentConfig.MIN_WAGE)} €
                 </strong>
@@ -191,7 +191,7 @@ export default function CalculatorWidget() {
                 </span>
               </span>
               <span>
-                Макс. осиг. доход:{" "}
+                Макс. осиг. доход (Бруто):{" "}
                 <strong className="text-gray-500">
                   {Math.round(currentConfig.MAX_INSURABLE_INCOME)} €
                 </strong>
@@ -244,6 +244,37 @@ export default function CalculatorWidget() {
                   (~{" "}
                   {toBGN(calcMode === "grossToNet" ? result.net : result.gross)}{" "}
                   лв.)
+                </div>
+
+                {/* WOW Екстри: Часова ставка и Данъчна тежест */}
+                <div className="grid grid-cols-2 gap-3 mt-5 text-left">
+                  <div className="bg-emerald-50/50 border border-emerald-100 p-3 rounded-xl flex flex-col justify-center">
+                    <span className="block text-[10px] text-emerald-600/80 font-bold uppercase mb-0.5 tracking-wider">
+                      Чисто на час (средно 168 ч./мес.)
+                    </span>
+                    <span className="text-lg font-black text-emerald-700">
+                      {(result.net / 168).toFixed(2)} €
+                    </span>
+                    <span className="block text-xs text-emerald-600/70 font-medium mt-0.5">
+                      ~ {toBGN(result.net / 168)} лв.
+                    </span>
+                  </div>
+
+                  <div className="bg-red-50/50 border border-red-100 p-3 rounded-xl flex flex-col justify-center">
+                    <span className="block text-[10px] text-red-600/80 font-bold uppercase mb-0.5 tracking-wider">
+                      Данъчна тежест
+                    </span>
+                    <span className="text-lg font-black text-red-700">
+                      {(
+                        (result.employeeTaxes.total / result.gross) *
+                        100
+                      ).toFixed(1)}
+                      %
+                    </span>
+                    <span className="block text-xs text-red-600/70 font-medium mt-0.5">
+                      отиват в държавата
+                    </span>
+                  </div>
                 </div>
               </div>
 
