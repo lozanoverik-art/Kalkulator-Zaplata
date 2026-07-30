@@ -29,7 +29,7 @@ export default function CalculatorWidget() {
   const [calcMode, setCalcMode] = useState<"grossToNet" | "netToGross">(
     "grossToNet",
   );
-  const [inputValue, setInputValue] = useState<string>("1500");
+  const [inputValue, setInputValue] = useState<string>("1000");
   const [result, setResult] = useState<SalaryResult | null>(null);
   const [showEmployerCost, setShowEmployerCost] = useState<boolean>(false);
   const [insights, setInsights] = useState<AdvisorInsight[]>([]);
@@ -178,6 +178,29 @@ export default function CalculatorWidget() {
                 EUR
               </span>
             </div>
+            {/* Информационен ред за лимитите на годината */}
+            <div className="flex flex-col sm:flex-row sm:justify-between text-[11px] md:text-xs text-gray-400 mt-2.5 font-medium px-1 gap-1">
+              <span>
+                Мин. заплата:{" "}
+                <strong className="text-gray-500">
+                  {Math.round(currentConfig.MIN_WAGE)} €
+                </strong>
+                <span className="opacity-70">
+                  {" "}
+                  (~{toBGN(currentConfig.MIN_WAGE)} лв.)
+                </span>
+              </span>
+              <span>
+                Макс. осиг. доход:{" "}
+                <strong className="text-gray-500">
+                  {Math.round(currentConfig.MAX_INSURABLE_INCOME)} €
+                </strong>
+                <span className="opacity-70">
+                  {" "}
+                  (~{toBGN(currentConfig.MAX_INSURABLE_INCOME)} лв.)
+                </span>
+              </span>
+            </div>
 
             <div className="mt-8 bg-gray-50 px-4 py-3 rounded-xl border border-gray-100 transition-colors">
               <label className="flex items-center gap-3 cursor-pointer">
@@ -253,7 +276,7 @@ export default function CalculatorWidget() {
                     {result.gross.toFixed(2)} €
                   </span>
                 </div>
-                
+
                 {/* Главен ред за общи осигуровки */}
                 <div className="flex justify-between items-center mt-1">
                   <span className="text-gray-500">Общо осигуровки:</span>
@@ -267,19 +290,34 @@ export default function CalculatorWidget() {
                     €
                   </span>
                 </div>
-                
+
                 {/* Детайлна разбивка с отстъп */}
                 <div className="pl-3 mt-1.5 mb-2.5 space-y-1.5 text-xs text-gray-500 border-l-[1.5px] border-gray-200">
                   <div className="flex justify-between">
-                    <span>ДОО (Фонд Пенсии) <span className="text-[10px] text-gray-400 ml-1">8.38%</span></span>
+                    <span>
+                      ДОО (Фонд Пенсии){" "}
+                      <span className="text-[10px] text-gray-400 ml-1">
+                        8.38%
+                      </span>
+                    </span>
                     <span>{result.employeeTaxes.doo.toFixed(2)} €</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>ДЗПО (Универсален) <span className="text-[10px] text-gray-400 ml-1">2.20%</span></span>
+                    <span>
+                      ДЗПО (Универсален){" "}
+                      <span className="text-[10px] text-gray-400 ml-1">
+                        2.20%
+                      </span>
+                    </span>
                     <span>{result.employeeTaxes.dzpo.toFixed(2)} €</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Здравно осигуряване <span className="text-[10px] text-gray-400 ml-1">3.20%</span></span>
+                    <span>
+                      Здравно осигуряване{" "}
+                      <span className="text-[10px] text-gray-400 ml-1">
+                        3.20%
+                      </span>
+                    </span>
                     <span>{result.employeeTaxes.health.toFixed(2)} €</span>
                   </div>
                 </div>
@@ -293,17 +331,53 @@ export default function CalculatorWidget() {
               </div>
 
               {showEmployerCost && (
-                <div className="mt-3 pt-3 border-t border-dashed border-gray-200 bg-blue-50/40 p-3 rounded-xl">
-                  <h4 className="font-bold text-blue-900 mb-1 text-xs">
-                    Пълен разход за работодател:
+                <div className="mt-4 pt-4 border-t border-dashed border-gray-200 bg-blue-50/60 p-4 rounded-xl">
+                  <h4 className="font-bold text-blue-900 mb-3 text-xs uppercase tracking-wide">
+                    Разходи за работодателя
                   </h4>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-blue-900 font-black">
-                      {result.totalCost.toFixed(2)} €
+
+                  <div className="space-y-1.5 text-xs text-blue-800/70 mb-3">
+                    <div className="flex justify-between">
+                      <span>
+                        ДОО (Фонд Пенсии и др.){" "}
+                        <span className="text-[10px] opacity-70 ml-1">
+                          10.92%
+                        </span>
+                      </span>
+                      <span>+ {result.employerTaxes.doo.toFixed(2)} €</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>
+                        ДЗПО (Универсален){" "}
+                        <span className="text-[10px] opacity-70 ml-1">
+                          2.80%
+                        </span>
+                      </span>
+                      <span>+ {result.employerTaxes.dzpo.toFixed(2)} €</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>
+                        Здравно осигуряване{" "}
+                        <span className="text-[10px] opacity-70 ml-1">
+                          4.80%
+                        </span>
+                      </span>
+                      <span>+ {result.employerTaxes.health.toFixed(2)} €</span>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-2 border-t border-blue-200/60">
+                    <span className="font-bold text-blue-900 text-sm">
+                      Общ разход:
                     </span>
-                    <span className="text-xs text-blue-500 font-medium">
-                      (~ {toBGN(result.totalCost)} лв.)
-                    </span>
+                    <div className="text-right">
+                      <span className="text-blue-900 font-black block text-base">
+                        {result.totalCost.toFixed(2)} €
+                      </span>
+                      <span className="text-[11px] text-blue-600/80 font-medium block mt-0.5">
+                        (~ {toBGN(result.totalCost)} лв.)
+                      </span>
+                    </div>
                   </div>
                 </div>
               )}
