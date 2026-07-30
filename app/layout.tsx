@@ -1,63 +1,33 @@
-// src/app/layout.tsx
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google'; // Ако ползваш друг шрифт, остави твоя
+import './globals.css';
 
-const inter = Inter({ subsets: ["latin", "cyrillic"] });
+const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
-// ТОВА Е SEO МАГИЯТА:
 export const metadata: Metadata = {
-  title: "Калкулатор Заплата 2026 (Бруто - Нето) | Актуални осигуровки",
-  description: "Изчисли своята нетна и брутна заплата в България за 2026 г. Бърз, точен калкулатор с актуални осигуровки, ДОД и прагове в евро. Моментално пресмятане.",
-  keywords: "калкулатор заплата, бруто нето, нетна заплата, осигуровки 2026, данък общ доход, пресмятане на заплата евро, калкулатор възнаграждение",
-  
-  // OpenGraph (За Facebook, Viber, LinkedIn)
+  title: 'Калкулатор Заплата 2026 | Изчисляване на Бруто и Нето',
+  description: 'Най-точният и модерен калкулатор за заплати в България. Изчисли мигновено своята нетна и брутна заплата, осигуровки и данъци по нормативи на НАП и НОИ.',
+  keywords: 'калкулатор заплата, брутна заплата, нетна заплата, осигуровки, данъци, калкулатор бруто нето, заплата 2026, brutoneto',
+  authors: [{ name: 'BrutoNeto' }],
+  robots: 'index, follow',
   openGraph: {
-    title: "Калкулатор Заплата 2026 (Бруто - Нето)",
-    description: "Разбери точно колко пари ще получиш чисто! Актуален калкулатор с новите прагове и осигуровки за 2026 година в евро.",
-    url: "https://твоят-домейн.bg", // Смени го, когато купиш домейн
-    siteName: "Calc.bg",
-    locale: "bg_BG",
-    type: "website",
-    images: [
-      {
-        url: "https://твоят-домейн.bg/og-image.jpg", // Ще създадем тази картинка по-късно
-        width: 1200,
-        height: 630,
-        alt: "Калкулатор Заплата 2026",
-      },
-    ],
-  },
-  
-  // За Twitter (X)
-  twitter: {
-    card: "summary_large_image",
-    title: "Калкулатор Заплата 2026",
-    description: "Най-бързият калкулатор за нетна заплата в България.",
-    images: ["https://твоят-домейн.bg/og-image.jpg"],
-  },
-  
-  // Допълнителни тагове за ботове
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
+    title: 'Калкулатор Заплата 2026 | Бруто в Нето',
+    description: 'Изчисли мигновено своята нетна и брутна заплата с най-прецизния калкулатор в България.',
+    url: 'https://brutoneto.com', // Увери се, че това е точният ти домейн
+    siteName: 'BrutoNeto',
+    locale: 'bg_BG',
+    type: 'website',
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="bg">
+    // Много е важно lang да е "bg", за да знае Google, че сайтът е на български!
+    <html lang="bg"> 
       <body className={inter.className}>{children}</body>
     </html>
   );
