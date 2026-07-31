@@ -5,6 +5,7 @@ import {
   calculateSalary,
   calculateGrossFromNet,
   SalaryResult,
+  calculateCivilContract,
 } from "../utils/calculator";
 import { TAX_YEARS, CURRENT_YEAR } from "../utils/config";
 import { toBGN } from "../utils/helpers";
@@ -29,19 +30,29 @@ export default function CalculatorWidget() {
   const [calcMode, setCalcMode] = useState<"grossToNet" | "netToGross">(
     "grossToNet",
   );
+  const [contractType, setContractType] = useState<"labor" | "civil">("labor"); // ДОБАВЕНО
   const [inputValue, setInputValue] = useState<string>("1000");
   const [result, setResult] = useState<SalaryResult | null>(null);
   const [showEmployerCost, setShowEmployerCost] = useState<boolean>(false);
   const [insights, setInsights] = useState<AdvisorInsight[]>([]);
   const [showInsights, setShowInsights] = useState<boolean>(false);
-
   useEffect(() => {
     const numericValue = Number(inputValue);
     if (!isNaN(numericValue) && numericValue > 0) {
-      const calculatedResult =
-        calcMode === "grossToNet"
-          ? calculateSalary(numericValue, currentConfig)
-          : calculateGrossFromNet(numericValue, currentConfig);
+      let calculatedResult;
+
+      if (contractType === "civil") {
+        // За граждански договор ползваме новата функция
+        calculatedResult = calculateCivilContract(numericValue, currentConfig);
+        // Принудително държим режима на Бруто към Нето (по-лесно за възприемане)
+        if (calcMode === "netToGross") setCalcMode("grossToNet");
+      } else {
+        // Стандартен трудов договор
+        calculatedResult =
+          calcMode === "grossToNet"
+            ? calculateSalary(numericValue, currentConfig)
+            : calculateGrossFromNet(numericValue, currentConfig);
+      }
 
       setResult(calculatedResult);
       setInsights(generateTaxInsights(calculatedResult, currentConfig));
@@ -49,32 +60,30 @@ export default function CalculatorWidget() {
       setResult(null);
       setInsights([]);
     }
-  }, [inputValue, calcMode, selectedYear, currentConfig]);
+  }, [inputValue, calcMode, selectedYear, currentConfig, contractType]);
 
   const chartData = result
     ? [
-        { name: "Чиста Заплата", value: result.net, color: "#10b981" },
+        {
+          name: "Чиста Заплата",
+          value: Math.max(0, result.net),
+          color: "#10b981",
+        },
         {
           name: "Осиг. (Служител)",
-          value: result.employeeTaxes.total - result.employeeTaxes.incomeTax,
+          value: Math.max(0, result.employeeTaxes.total),
           color: "#f59e0b",
         },
         {
           name: "Данък ДОД",
-          value: result.employeeTaxes.incomeTax,
+          value: Math.max(0, result.employeeTaxes.incomeTax),
           color: "#ef4444",
         },
-        ...(showEmployerCost
-          ? [
-              {
-                name: "Осиг. (Работодател)",
-                value: result.employerTaxes.total,
-                color: "#3b82f6",
-              },
-            ]
-          : []),
       ]
     : [];
+
+  // Пресмятаме общата сума само от положителните стойности за перфектни проценти
+  const totalChartValue = chartData.reduce((sum, item) => sum + item.value, 0);
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
@@ -131,7 +140,33 @@ export default function CalculatorWidget() {
                 ))}
             </select>
           </div>
-
+          {/* ИЗБОР НА ТИП ДОГОВОР */}
+          <div className="flex bg-gray-100 p-1 rounded-xl items-center relative border border-gray-200">
+            <button
+              onClick={() => setContractType("labor")}
+              className={`flex-1 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all z-10 ${
+                contractType === "labor"
+                  ? "bg-white text-blue-700 shadow-md border border-gray-200"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              Трудов договор
+            </button>
+            <button
+              onClick={() => {
+                setContractType("civil");
+                setCalcMode("grossToNet"); // Връщаме на Бруто
+                setShowEmployerCost(false); // Скриваме разхода за работодател
+              }}
+              className={`flex-1 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all z-10 ${
+                contractType === "civil"
+                  ? "bg-white text-blue-700 shadow-md border border-gray-200"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              Граждански договор
+            </button>
+          </div>
           <div className="bg-gray-100 p-1 rounded-xl flex items-center relative border border-gray-200">
             <button
               onClick={() => setCalcMode("grossToNet")}
@@ -145,11 +180,12 @@ export default function CalculatorWidget() {
             </button>
             <button
               onClick={() => setCalcMode("netToGross")}
+              disabled={contractType === "civil"} // Изключваме при граждански
               className={`flex-1 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all z-10 ${
                 calcMode === "netToGross"
                   ? "bg-white text-blue-700 shadow-md border border-gray-200"
                   : "text-gray-600 hover:text-gray-900"
-              }`}
+              } ${contractType === "civil" ? "opacity-40 cursor-not-allowed" : ""}`}
             >
               Нето към Бруто
             </button>
@@ -192,24 +228,25 @@ export default function CalculatorWidget() {
                 </strong>
               </span>
             </div>
-
-            <div className="mt-8 bg-gray-50 px-4 py-3 rounded-xl border border-gray-200">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <div className="relative flex items-center">
-                  <input
-                    type="checkbox"
-                    className="sr-only peer"
-                    checked={showEmployerCost}
-                    onChange={() => setShowEmployerCost(!showEmployerCost)}
-                  />
-                  <div className="w-10 h-5 bg-gray-300 rounded-full peer peer-checked:after:translate-x-5 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600 peer-checked:after:border-white"></div>
-                </div>
-                <span className="text-sm font-bold text-gray-800 flex items-center gap-2">
-                  <Building2 size={18} className="text-blue-600" />
-                  Пълен разход за работодателя?
-                </span>
-              </label>
-            </div>
+            {contractType === "labor" && (
+              <div className="mt-8 bg-gray-50 px-4 py-3 rounded-xl border border-gray-200">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <div className="relative flex items-center">
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={showEmployerCost}
+                      onChange={() => setShowEmployerCost(!showEmployerCost)}
+                    />
+                    <div className="w-10 h-5 bg-gray-300 rounded-full peer peer-checked:after:translate-x-5 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600 peer-checked:after:border-white"></div>
+                  </div>
+                  <span className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                    <Building2 size={18} className="text-blue-600" />
+                    Пълен разход за работодателя?
+                  </span>
+                </label>
+              </div>
+            )}
           </div>
         </div>
 
@@ -255,7 +292,9 @@ export default function CalculatorWidget() {
                     </span>
                     <span className="text-lg font-black text-red-700">
                       {(
-                        (result.employeeTaxes.total / result.gross) *
+                        ((result.employeeTaxes.total +
+                          result.employeeTaxes.incomeTax) /
+                          result.gross) * // ТУК: Събираме осигуровките и данъка
                         100
                       ).toFixed(1)}
                       %
@@ -302,15 +341,7 @@ export default function CalculatorWidget() {
                         {entry.name}
                       </span>
                       <span className="font-bold text-gray-900">
-                        {(
-                          (entry.value /
-                            (result.gross +
-                              (showEmployerCost
-                                ? result.employerTaxes.total
-                                : 0))) *
-                          100
-                        ).toFixed(1)}
-                        %
+                        {((entry.value / result.gross) * 100).toFixed(1)}%
                       </span>
                     </div>
                   ))}
@@ -327,6 +358,20 @@ export default function CalculatorWidget() {
                   </span>
                 </div>
 
+                {/* ПОКАЗВАМЕ НПР САМО ПРИ ГРАЖДАНСКИ ДОГОВОР */}
+                {result.nip !== undefined && contractType === "civil" && (
+                  <div className="flex justify-between items-center mt-2 mb-1 bg-purple-50/50 p-2 rounded-lg border border-purple-100">
+                    <span className="text-gray-700 font-medium flex flex-col">
+                      <span>НПР (25% необлагаеми):</span>
+                      <span className="text-[10px] text-gray-500 font-normal leading-tight mt-0.5">
+                        * не се удържат, само намаляват данъка
+                      </span>
+                    </span>
+                    <span className="font-bold text-purple-600">
+                      {result.nip.toFixed(2)} €
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between items-center mt-1">
                   <span className="text-gray-700 font-medium">
                     Общо осигуровки:

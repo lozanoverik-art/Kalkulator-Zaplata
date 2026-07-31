@@ -3,6 +3,8 @@ import { TAX_YEARS, CURRENT_YEAR } from "./config";
 
 export interface SalaryResult {
   gross: number;
+  nip?: number; // ДОБАВЕНО: Нормативно признати разходи (за граждански договор)
+  insurableBase?: number; // ДОБАВЕНО: Осигурителен доход (за граждански договор)
   net: number;
   employeeTaxes: {
     doo: number;
@@ -91,4 +93,51 @@ export function calculateGrossFromNet(targetNet: number, config: any): SalaryRes
   }
 
   return calculateSalary(Math.round(bestGross * 100) / 100, config);
+}
+
+// ДОБАВЕНО: Функция за граждански договори
+export function calculateCivilContract(grossInput: number, config: any): SalaryResult {
+  const gross = Math.round(grossInput * 100);
+  const maxInsurable = Math.round(config.MAX_INSURABLE_INCOME * 100);
+
+  // 1. Нормативно признати разходи (НПР) - 25% за свободни професии/услуги
+  const nip = Math.round(gross * 0.25);
+  
+  // 2. Доход за осигуряване (Бруто - НПР)
+  const baseIncome = gross - nip;
+
+  // 3. Осигурителен доход (Ограничен само от Максимума, няма минимум при гражд. дог.)
+  const insurableIncome = Math.min(baseIncome, maxInsurable);
+
+  // 4. Осигуровки (само за сметка на лицето)
+  const empDoo = Math.round(insurableIncome * config.EMPLOYEE_DOO);
+  const empDzpo = Math.round(insurableIncome * config.EMPLOYEE_DZPO);
+  const empHealth = Math.round(insurableIncome * config.EMPLOYEE_HEALTH);
+  const empTotalIns = empDoo + empDzpo + empHealth;
+
+  // 5. Данъчна основа = (Бруто - НПР) - Осигуровки
+  const taxableBase = Math.max(0, baseIncome - empTotalIns);
+  
+  // 6. Данък ДОД (10%)
+  const incomeTax = Math.round(taxableBase * config.INCOME_TAX);
+
+  // 7. Крайно Нето = Бруто - Платени осигуровки - Платен данък
+  const net = gross - empTotalIns - incomeTax;
+
+  return {
+    gross: gross / 100,
+    nip: nip / 100,
+    insurableBase: insurableIncome / 100,
+    net: net / 100,
+    employeeTaxes: {
+      doo: empDoo / 100,
+      dzpo: empDzpo / 100,
+      health: empHealth / 100,
+      total: empTotalIns / 100,
+      incomeTax: incomeTax / 100,
+    },
+    // При граждански договор работодателят/възложителят няма същите социални разходи върху сумата
+    employerTaxes: { doo: 0, dzpo: 0, health: 0, total: 0 },
+    totalCost: gross / 100,
+  };
 }
