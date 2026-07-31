@@ -1,81 +1,94 @@
 // src/utils/calculator.ts
-import { YearConfig, TAX_YEARS, CURRENT_YEAR } from './config';
+import { TAX_YEARS, CURRENT_YEAR } from "./config";
 
 export interface SalaryResult {
   gross: number;
   net: number;
-  taxBase: number;
   employeeTaxes: {
     doo: number;
     dzpo: number;
     health: number;
-    incomeTax: number;
     total: number;
+    incomeTax: number;
   };
-  // Добавяме липсващите полета за работодател
   employerTaxes: {
     doo: number;
     dzpo: number;
     health: number;
     total: number;
   };
-  totalCost: number; 
+  totalCost: number;
 }
 
-export function calculateSalary(grossWage: number, config: YearConfig = TAX_YEARS[CURRENT_YEAR]): SalaryResult {
-  const insurableIncome = Math.min(grossWage, config.MAX_INSURABLE_INCOME);
+export function calculateSalary(grossInput: number, config: any): SalaryResult {
+  // 1. Превръщаме всичко в стотинки (центове), за да няма проблем с плаващата запетая!
+  const gross = Math.round(grossInput * 100);
+  const minWage = Math.round(config.MIN_WAGE * 100);
+  const maxInsurable = Math.round(config.MAX_INSURABLE_INCOME * 100);
 
-  // Сметки за служителя
-  const empDoo = insurableIncome * config.EMPLOYEE_DOO;
-  const empDzpo = insurableIncome * config.EMPLOYEE_DZPO;
-  const empHealth = insurableIncome * config.EMPLOYEE_HEALTH;
-  const empTotalInsurances = empDoo + empDzpo + empHealth;
+  // Осигурителен доход (ограничен от минимума и максимума за годината)
+  const insurableIncome = Math.min(Math.max(gross, minWage), maxInsurable);
 
-  const taxBase = grossWage - empTotalInsurances;
-  const incomeTax = taxBase * config.INCOME_TAX;
-  const totalEmployeeTaxes = empTotalInsurances + incomeTax;
+  // --- ОСИГУРОВКИ ОТ СЛУЖИТЕЛЯ ---
+  const empDoo = Math.round(insurableIncome * config.EMPLOYEE_DOO);
+  const empDzpo = Math.round(insurableIncome * config.EMPLOYEE_DZPO);
+  const empHealth = Math.round(insurableIncome * config.EMPLOYEE_HEALTH);
+  const empTotalIns = empDoo + empDzpo + empHealth;
 
-  const netWage = grossWage - totalEmployeeTaxes;
+  // Данък ДОД (10% върху остатъка, само ако има положителен остатък)
+  const taxableBase = Math.max(0, gross - empTotalIns);
+  const incomeTax = Math.round(taxableBase * config.INCOME_TAX);
 
-  // Сметки за работодателя
-  const employerDoo = insurableIncome * config.EMPLOYER_DOO;
-  const employerDzpo = insurableIncome * config.EMPLOYER_DZPO;
-  const employerHealth = insurableIncome * config.EMPLOYER_HEALTH;
-  const totalEmployerTaxes = employerDoo + employerDzpo + employerHealth;
+  // Чиста сума
+  const net = gross - empTotalIns - incomeTax;
 
+  // --- ОСИГУРОВКИ ОТ РАБОТОДАТЕЛЯ ---
+  const erDoo = Math.round(insurableIncome * config.EMPLOYER_DOO);
+  const erDzpo = Math.round(insurableIncome * config.EMPLOYER_DZPO);
+  const erHealth = Math.round(insurableIncome * config.EMPLOYER_HEALTH);
+  const erTotalIns = erDoo + erDzpo + erHealth;
+
+  // Пълен разход
+  const totalCost = gross + erTotalIns;
+
+  // Връщаме обратно в Евро/Лева (делено на 100)
   return {
-    gross: grossWage,
-    net: netWage,
-    taxBase,
+    gross: gross / 100,
+    net: net / 100,
     employeeTaxes: {
-      doo: empDoo,
-      dzpo: empDzpo,
-      health: empHealth,
-      incomeTax,
-      total: totalEmployeeTaxes,
+      doo: empDoo / 100,
+      dzpo: empDzpo / 100,
+      health: empHealth / 100,
+      total: empTotalIns / 100,
+      incomeTax: incomeTax / 100,
     },
     employerTaxes: {
-      doo: employerDoo,
-      dzpo: employerDzpo,
-      health: employerHealth,
-      total: totalEmployerTaxes,
+      doo: erDoo / 100,
+      dzpo: erDzpo / 100,
+      health: erHealth / 100,
+      total: erTotalIns / 100,
     },
-    totalCost: grossWage + totalEmployerTaxes,
+    totalCost: totalCost / 100,
   };
 }
 
-export function calculateGrossFromNet(netWage: number, config: YearConfig = TAX_YEARS[CURRENT_YEAR]): SalaryResult {
-    const totalEmployeeInsuranceRate = config.EMPLOYEE_DOO + config.EMPLOYEE_DZPO + config.EMPLOYEE_HEALTH;
-    const taxRate = config.INCOME_TAX;
+export function calculateGrossFromNet(targetNet: number, config: any): SalaryResult {
+  // Използваме Binary Search, за да намерим точното Бруто за търсеното Нето
+  let low = targetNet;
+  let high = targetNet * 2; // Груба горна граница
+  let bestGross = targetNet;
+
+  for (let i = 0; i < 40; i++) {
+    const mid = (low + high) / 2;
+    const res = calculateSalary(mid, config);
     
-    let grossWage = netWage / ((1 - totalEmployeeInsuranceRate) * (1 - taxRate));
-    
-    if (grossWage > config.MAX_INSURABLE_INCOME) {
-        const cappedInsurance = config.MAX_INSURABLE_INCOME * totalEmployeeInsuranceRate;
-        grossWage = (netWage / (1 - taxRate)) + cappedInsurance;
+    if (res.net < targetNet) {
+      low = mid;
+    } else {
+      bestGross = mid;
+      high = mid;
     }
-    
-    grossWage = Math.max(grossWage, config.MIN_WAGE);
-    
-    return calculateSalary(grossWage, config);
+  }
+
+  return calculateSalary(Math.round(bestGross * 100) / 100, config);
 }

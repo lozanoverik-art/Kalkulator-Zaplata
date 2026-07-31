@@ -17,9 +17,6 @@ export default function Home() {
       <div className="max-w-5xl mx-auto px-4 pt-10 pb-12">
         {/* МАРКЕТИНГОВО ПОСЛАНИЕ (CATCHY HERO) */}
         <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
-          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-3.5 py-1.5 rounded-full text-xs font-extrabold tracking-wide uppercase border border-blue-200">
-            Най-прецизният калкулатор за заплати в България
-          </div>
           <h1 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight leading-tight">
             Изчисли своята <span className="text-blue-600">нетна заплата</span>{" "}
             с пълна детайлност.

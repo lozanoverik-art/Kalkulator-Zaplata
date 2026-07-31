@@ -27,7 +27,7 @@ export default function CalculatorWidget() {
   const [selectedYear, setSelectedYear] = useState<number>(CURRENT_YEAR);
   const currentConfig = TAX_YEARS[selectedYear] || TAX_YEARS[CURRENT_YEAR];
   const [calcMode, setCalcMode] = useState<"grossToNet" | "netToGross">(
-    "grossToNet",
+    "grossToNet"
   );
   const [inputValue, setInputValue] = useState<string>("1000");
   const [result, setResult] = useState<SalaryResult | null>(null);
@@ -79,14 +79,14 @@ export default function CalculatorWidget() {
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white border border-gray-100 p-3 rounded-xl shadow-lg">
+        <div className="bg-white border border-gray-200 p-3 rounded-xl shadow-lg">
           <p className="text-sm font-bold text-gray-900">{payload[0].name}</p>
           <p
             className="text-sm font-semibold"
             style={{ color: payload[0].payload.color }}
           >
             {payload[0].value.toFixed(2)} €{" "}
-            <span className="text-xs text-gray-400 font-normal ml-1">
+            <span className="text-xs text-gray-500 font-normal ml-1">
               (~{toBGN(payload[0].value)} лв.)
             </span>
           </p>
@@ -97,25 +97,24 @@ export default function CalculatorWidget() {
   };
 
   return (
-    <div className="w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 transition-colors">
-      {/* Дискретна лента със знаци за доверие */}
-      <div className="bg-gray-50 border-b border-gray-100 py-3 px-6 flex flex-wrap items-center justify-center gap-4 text-xs text-gray-500 font-medium">
+    <div className="w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-200 transition-colors">
+      <div className="bg-gray-50 border-b border-gray-200 py-3 px-6 flex flex-wrap items-center justify-center gap-4 text-xs text-gray-700 font-medium">
         <span className="inline-flex items-center gap-1.5">
-          <ShieldCheck size={15} className="text-emerald-500" />
+          <ShieldCheck size={16} className="text-emerald-600" />
           По нормативи на НАП и НОИ
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <Lock size={15} className="text-blue-500" />
+          <Lock size={16} className="text-blue-600" />
           Фиксиран курс БНБ: 1 EUR = 1.95583 BGN
         </span>
       </div>
 
       <div className="p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-10">
-        {/* ЛЯВА КОЛОНА: Входни данни и настройки */}
+        {/* ЛЯВА КОЛОНА: Входни данни */}
         <div className="space-y-6 flex flex-col">
-          <div className="flex items-center justify-between bg-gray-50 px-4 py-2.5 rounded-xl border border-gray-200">
-            <span className="text-xs font-bold text-gray-600 flex items-center gap-2">
-              <Calendar size={16} className="text-blue-500" />
+          <div className="flex items-center justify-between bg-gray-50 px-4 py-2.5 rounded-xl border border-gray-300">
+            <span className="text-sm font-bold text-gray-700 flex items-center gap-2">
+              <Calendar size={18} className="text-blue-600" />
               Данъчна година:
             </span>
             <select
@@ -133,23 +132,23 @@ export default function CalculatorWidget() {
             </select>
           </div>
 
-          <div className="bg-gray-100 p-1 rounded-xl flex items-center relative transition-colors">
+          <div className="bg-gray-100 p-1 rounded-xl flex items-center relative border border-gray-200">
             <button
               onClick={() => setCalcMode("grossToNet")}
-              className={`flex-1 py-2 text-xs md:text-sm font-bold rounded-lg transition-all z-10 ${
+              className={`flex-1 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all z-10 ${
                 calcMode === "grossToNet"
-                  ? "bg-white text-blue-600 shadow-sm"
-                  : "text-gray-500"
+                  ? "bg-white text-blue-700 shadow-md border border-gray-200"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
               Бруто към Нето
             </button>
             <button
               onClick={() => setCalcMode("netToGross")}
-              className={`flex-1 py-2 text-xs md:text-sm font-bold rounded-lg transition-all z-10 ${
+              className={`flex-1 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all z-10 ${
                 calcMode === "netToGross"
-                  ? "bg-white text-blue-600 shadow-sm"
-                  : "text-gray-500"
+                  ? "bg-white text-blue-700 shadow-md border border-gray-200"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
               Нето към Бруто
@@ -157,7 +156,7 @@ export default function CalculatorWidget() {
           </div>
 
           <div className="pt-2">
-            <label className="block text-gray-700 font-bold mb-3 text-base">
+            <label className="block text-gray-900 font-bold mb-3 text-base">
               {calcMode === "grossToNet"
                 ? "Твоята брутна заплата"
                 : "Твоя желана нетна сума"}
@@ -168,41 +167,33 @@ export default function CalculatorWidget() {
                 type="number"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                className="w-full text-4xl font-black text-gray-900 border-b-4 border-blue-200 focus:border-blue-600 outline-none pb-2 bg-transparent transition-colors"
+                className="w-full text-4xl font-black text-gray-900 border-b-4 border-blue-300 focus:border-blue-600 outline-none pb-2 bg-transparent transition-colors"
                 placeholder="0"
                 min="0"
                 step="any"
                 inputMode="decimal"
               />
-              <span className="absolute right-0 bottom-4 text-gray-400 font-bold text-xl">
+              <span className="absolute right-0 bottom-4 text-gray-600 font-bold text-xl">
                 EUR
               </span>
             </div>
-            {/* Информационен ред за лимитите на годината */}
-            <div className="flex flex-col sm:flex-row sm:justify-between text-[11px] md:text-xs text-gray-400 mt-2.5 font-medium px-1 gap-1">
+            
+            <div className="flex flex-col sm:flex-row sm:justify-between text-xs text-gray-600 mt-3 font-medium px-1 gap-1">
               <span>
-                Мин. заплата (Бруто):{" "}
-                <strong className="text-gray-500">
+                Мин. праг:{" "}
+                <strong className="text-gray-900">
                   {Math.round(currentConfig.MIN_WAGE)} €
                 </strong>
-                <span className="opacity-70">
-                  {" "}
-                  (~{toBGN(currentConfig.MIN_WAGE)} лв.)
-                </span>
               </span>
               <span>
-                Макс. осиг. доход (Бруто):{" "}
-                <strong className="text-gray-500">
+                Макс. осиг. доход:{" "}
+                <strong className="text-gray-900">
                   {Math.round(currentConfig.MAX_INSURABLE_INCOME)} €
                 </strong>
-                <span className="opacity-70">
-                  {" "}
-                  (~{toBGN(currentConfig.MAX_INSURABLE_INCOME)} лв.)
-                </span>
               </span>
             </div>
 
-            <div className="mt-8 bg-gray-50 px-4 py-3 rounded-xl border border-gray-100 transition-colors">
+            <div className="mt-8 bg-gray-50 px-4 py-3 rounded-xl border border-gray-200">
               <label className="flex items-center gap-3 cursor-pointer">
                 <div className="relative flex items-center">
                   <input
@@ -211,11 +202,11 @@ export default function CalculatorWidget() {
                     checked={showEmployerCost}
                     onChange={() => setShowEmployerCost(!showEmployerCost)}
                   />
-                  <div className="w-9 h-5 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="w-10 h-5 bg-gray-300 rounded-full peer peer-checked:after:translate-x-5 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600 peer-checked:after:border-white"></div>
                 </div>
-                <span className="text-xs md:text-sm font-bold text-gray-700 flex items-center gap-2">
-                  <Building2 size={15} className="text-blue-500" />
-                  Колко реално струваш на работодателя?
+                <span className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                  <Building2 size={18} className="text-blue-600" />
+                  Пълен разход за работодателя?
                 </span>
               </label>
             </div>
@@ -223,45 +214,41 @@ export default function CalculatorWidget() {
         </div>
 
         {/* ДЯСНА КОЛОНА: Резултати */}
-        <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 relative flex flex-col justify-between">
+        <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200 flex flex-col justify-between h-full">
           {!result ? (
-            <div className="h-full flex items-center justify-center text-gray-400 font-medium text-sm">
+            <div className="h-full flex items-center justify-center text-gray-500 font-semibold text-sm">
               Въведи валидна сума за резултат
             </div>
           ) : (
-            <div className="space-y-6 flex-1 flex flex-col">
-              <div className="text-center pb-5 border-b border-gray-200/60">
-                <p className="text-gray-400 font-bold uppercase tracking-wider text-xs mb-1">
+            <div className="space-y-6 flex flex-col h-full">
+              <div className="text-center pb-5 border-b border-gray-300">
+                <p className="text-gray-600 font-bold uppercase tracking-wider text-xs mb-1">
                   {calcMode === "grossToNet"
                     ? "Ти получаваш чисто"
                     : "Необходима брутна заплата"}
                 </p>
-                <div className="text-4xl md:text-5xl font-black text-emerald-500 leading-tight">
-                  {result.net.toFixed(2)}{" "}
-                  <span className="text-2xl text-emerald-400 font-bold">€</span>
+                <div className="text-4xl md:text-5xl font-black text-emerald-600 leading-tight">
+                  {calcMode === "grossToNet" ? result.net.toFixed(2) : result.gross.toFixed(2)}{" "}
+                  <span className="text-2xl text-emerald-500 font-bold">€</span>
                 </div>
-                <div className="text-gray-400 font-medium mt-1 text-xs md:text-sm">
+                <div className="text-gray-600 font-medium mt-1 text-sm">
                   (~{" "}
                   {toBGN(calcMode === "grossToNet" ? result.net : result.gross)}{" "}
                   лв.)
                 </div>
 
-                {/* WOW Екстри: Часова ставка и Данъчна тежест */}
                 <div className="grid grid-cols-2 gap-3 mt-5 text-left">
-                  <div className="bg-emerald-50/50 border border-emerald-100 p-3 rounded-xl flex flex-col justify-center">
-                    <span className="block text-[10px] text-emerald-600/80 font-bold uppercase mb-0.5 tracking-wider">
-                      Чисто на час (средно 168 ч./мес.)
+                  <div className="bg-emerald-50 border border-emerald-200 p-3 rounded-xl flex flex-col justify-center">
+                    <span className="block text-[11px] text-emerald-800 font-bold uppercase mb-0.5">
+                      На час (168 ч.)
                     </span>
                     <span className="text-lg font-black text-emerald-700">
                       {(result.net / 168).toFixed(2)} €
                     </span>
-                    <span className="block text-xs text-emerald-600/70 font-medium mt-0.5">
-                      ~ {toBGN(result.net / 168)} лв.
-                    </span>
                   </div>
 
-                  <div className="bg-red-50/50 border border-red-100 p-3 rounded-xl flex flex-col justify-center">
-                    <span className="block text-[10px] text-red-600/80 font-bold uppercase mb-0.5 tracking-wider">
+                  <div className="bg-red-50 border border-red-200 p-3 rounded-xl flex flex-col justify-center">
+                    <span className="block text-[11px] text-red-800 font-bold uppercase mb-0.5">
                       Данъчна тежест
                     </span>
                     <span className="text-lg font-black text-red-700">
@@ -271,47 +258,58 @@ export default function CalculatorWidget() {
                       ).toFixed(1)}
                       %
                     </span>
-                    <span className="block text-xs text-red-600/70 font-medium mt-0.5">
-                      отиват в държавата
-                    </span>
                   </div>
                 </div>
               </div>
 
-              <div className="h-36 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={chartData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={40}
-                      outerRadius={70}
-                      paddingAngle={4}
-                      dataKey="value"
-                      stroke="none"
-                    >
-                      {chartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip content={<CustomTooltip />} />
-                  </PieChart>
-                </ResponsiveContainer>
+              {/* Графика с Легенда (Подобрен UX) */}
+              <div className="flex flex-col md:flex-row items-center gap-4 py-2">
+                <div className="h-32 w-full md:w-1/2">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={chartData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={35}
+                        outerRadius={60}
+                        paddingAngle={4}
+                        dataKey="value"
+                        stroke="none"
+                      >
+                        {chartData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip content={<CustomTooltip />} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                
+                <div className="w-full md:w-1/2 space-y-2">
+                  {chartData.map((entry, idx) => (
+                    <div key={idx} className="flex justify-between items-center text-xs font-medium text-gray-700">
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color }}></span>
+                        {entry.name}
+                      </span>
+                      <span className="font-bold text-gray-900">{((entry.value / (result.gross + (showEmployerCost ? result.employerTaxes.total : 0))) * 100).toFixed(1)}%</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="space-y-2.5 text-sm pt-1">
+              <div className="space-y-2.5 text-sm pt-2 border-t border-gray-300">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-500">Брутна заплата:</span>
+                  <span className="text-gray-700 font-medium">Брутна заплата:</span>
                   <span className="font-bold text-gray-900">
                     {result.gross.toFixed(2)} €
                   </span>
                 </div>
 
-                {/* Главен ред за общи осигуровки */}
                 <div className="flex justify-between items-center mt-1">
-                  <span className="text-gray-500">Общо осигуровки:</span>
-                  <span className="font-bold text-orange-500">
+                  <span className="text-gray-700 font-medium">Общо осигуровки:</span>
+                  <span className="font-bold text-orange-600">
                     -{" "}
                     {(
                       result.employeeTaxes.doo +
@@ -322,91 +320,23 @@ export default function CalculatorWidget() {
                   </span>
                 </div>
 
-                {/* Детайлна разбивка с отстъп */}
-                <div className="pl-3 mt-1.5 mb-2.5 space-y-1.5 text-xs text-gray-500 border-l-[1.5px] border-gray-200">
-                  <div className="flex justify-between">
-                    <span>
-                      ДОО (Фонд Пенсии){" "}
-                      <span className="text-[10px] text-gray-400 ml-1">
-                        8.38%
-                      </span>
-                    </span>
-                    <span>{result.employeeTaxes.doo.toFixed(2)} €</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>
-                      ДЗПО (Универсален){" "}
-                      <span className="text-[10px] text-gray-400 ml-1">
-                        2.20%
-                      </span>
-                    </span>
-                    <span>{result.employeeTaxes.dzpo.toFixed(2)} €</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>
-                      Здравно осигуряване{" "}
-                      <span className="text-[10px] text-gray-400 ml-1">
-                        3.20%
-                      </span>
-                    </span>
-                    <span>{result.employeeTaxes.health.toFixed(2)} €</span>
-                  </div>
-                </div>
-
                 <div className="flex justify-between items-center pt-1">
-                  <span className="text-gray-500">Данък ДОД (10%):</span>
-                  <span className="font-bold text-red-500">
+                  <span className="text-gray-700 font-medium">Данък ДОД (10%):</span>
+                  <span className="font-bold text-red-600">
                     - {result.employeeTaxes.incomeTax.toFixed(2)} €
                   </span>
                 </div>
               </div>
 
               {showEmployerCost && (
-                <div className="mt-4 pt-4 border-t border-dashed border-gray-200 bg-blue-50/60 p-4 rounded-xl">
-                  <h4 className="font-bold text-blue-900 mb-3 text-xs uppercase tracking-wide">
-                    Разходи за работодателя
-                  </h4>
-
-                  <div className="space-y-1.5 text-xs text-blue-800/70 mb-3">
-                    <div className="flex justify-between">
-                      <span>
-                        ДОО (Фонд Пенсии и др.){" "}
-                        <span className="text-[10px] opacity-70 ml-1">
-                          10.92%
-                        </span>
-                      </span>
-                      <span>+ {result.employerTaxes.doo.toFixed(2)} €</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>
-                        ДЗПО (Универсален){" "}
-                        <span className="text-[10px] opacity-70 ml-1">
-                          2.80%
-                        </span>
-                      </span>
-                      <span>+ {result.employerTaxes.dzpo.toFixed(2)} €</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>
-                        Здравно осигуряване{" "}
-                        <span className="text-[10px] opacity-70 ml-1">
-                          4.80%
-                        </span>
-                      </span>
-                      <span>+ {result.employerTaxes.health.toFixed(2)} €</span>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between items-center pt-2 border-t border-blue-200/60">
+                <div className="mt-auto pt-4 border-t border-gray-300">
+                  <div className="flex justify-between items-center">
                     <span className="font-bold text-blue-900 text-sm">
-                      Общ разход:
+                      Пълен разход на фирмата:
                     </span>
                     <div className="text-right">
-                      <span className="text-blue-900 font-black block text-base">
+                      <span className="text-blue-900 font-black block text-lg">
                         {result.totalCost.toFixed(2)} €
-                      </span>
-                      <span className="text-[11px] text-blue-600/80 font-medium block mt-0.5">
-                        (~ {toBGN(result.totalCost)} лв.)
                       </span>
                     </div>
                   </div>
@@ -417,23 +347,19 @@ export default function CalculatorWidget() {
         </div>
       </div>
 
-      {/* СГЪВАЕМ ФИНАНСОВ СЪВЕТНИК */}
+      {/* Съветник */}
       {insights.length > 0 && (
-        <div className="px-6 md:px-10 pb-8">
-          <div className="border border-blue-100 rounded-2xl overflow-hidden transition-colors bg-blue-50/30">
+        <div className="px-6 md:px-10 pb-6 border-b border-gray-100">
+          <div className="border border-blue-200 rounded-2xl overflow-hidden transition-colors bg-blue-50/50">
             <button
               onClick={() => setShowInsights(!showInsights)}
-              className="w-full px-5 py-3.5 flex items-center justify-between text-left font-bold text-xs md:text-sm text-blue-900 hover:bg-blue-50/60 transition-colors"
+              className="w-full px-5 py-4 flex items-center justify-between text-left font-bold text-sm text-blue-900 hover:bg-blue-100/50 transition-colors"
             >
               <span className="flex items-center gap-2">
-                <Lightbulb size={16} className="text-amber-500" />
-                Експертен анализ и данъчни особености за {selectedYear} г.
+                <Lightbulb size={18} className="text-amber-500" />
+                Експертен анализ и данъчни особености
               </span>
-              {showInsights ? (
-                <ChevronUp size={16} />
-              ) : (
-                <ChevronDown size={16} />
-              )}
+              {showInsights ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </button>
 
             {showInsights && (
@@ -441,24 +367,18 @@ export default function CalculatorWidget() {
                 {insights.map((insight, idx) => (
                   <div
                     key={idx}
-                    className="flex items-start gap-3 bg-white p-3.5 rounded-xl border border-gray-100 shadow-2xs"
+                    className="flex items-start gap-3 bg-white p-4 rounded-xl border border-gray-200 shadow-sm"
                   >
                     <div className="mt-0.5 flex-shrink-0">
-                      {insight.type === "success" && (
-                        <CheckCircle2 size={16} className="text-emerald-500" />
-                      )}
-                      {insight.type === "warning" && (
-                        <AlertCircle size={16} className="text-amber-500" />
-                      )}
-                      {insight.type === "info" && (
-                        <Info size={16} className="text-blue-500" />
-                      )}
+                      {insight.type === "success" && <CheckCircle2 size={18} className="text-emerald-600" />}
+                      {insight.type === "warning" && <AlertCircle size={18} className="text-amber-500" />}
+                      {insight.type === "info" && <Info size={18} className="text-blue-600" />}
                     </div>
                     <div>
-                      <h4 className="text-xs md:text-sm font-bold text-gray-900 mb-0.5">
+                      <h4 className="text-sm font-bold text-gray-900 mb-1">
                         {insight.title}
                       </h4>
-                      <p className="text-xs text-gray-600 leading-relaxed">
+                      <p className="text-sm text-gray-700 leading-relaxed">
                         {insight.description}
                       </p>
                     </div>
@@ -469,6 +389,14 @@ export default function CalculatorWidget() {
           </div>
         </div>
       )}
+
+      {/* Декларация за поверителност за успокоение на параноята */}
+      <div className="bg-slate-100 py-3 px-6 text-xs text-slate-600 flex items-center justify-center gap-2 text-center border-t border-slate-200">
+        <ShieldCheck size={16} className="text-slate-500" />
+        <p>
+          <strong>100% Поверителност:</strong> Изчисленията се извършват локално във вашия браузър. Ние не съхраняваме вашия IP адрес и въведени суми.
+        </p>
+      </div>
     </div>
   );
 }
