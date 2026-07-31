@@ -27,7 +27,7 @@ export default function CalculatorWidget() {
   const [selectedYear, setSelectedYear] = useState<number>(CURRENT_YEAR);
   const currentConfig = TAX_YEARS[selectedYear] || TAX_YEARS[CURRENT_YEAR];
   const [calcMode, setCalcMode] = useState<"grossToNet" | "netToGross">(
-    "grossToNet"
+    "grossToNet",
   );
   const [inputValue, setInputValue] = useState<string>("1000");
   const [result, setResult] = useState<SalaryResult | null>(null);
@@ -177,7 +177,7 @@ export default function CalculatorWidget() {
                 EUR
               </span>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row sm:justify-between text-xs text-gray-600 mt-3 font-medium px-1 gap-1">
               <span>
                 Мин. праг:{" "}
@@ -228,7 +228,9 @@ export default function CalculatorWidget() {
                     : "Необходима брутна заплата"}
                 </p>
                 <div className="text-4xl md:text-5xl font-black text-emerald-600 leading-tight">
-                  {calcMode === "grossToNet" ? result.net.toFixed(2) : result.gross.toFixed(2)}{" "}
+                  {calcMode === "grossToNet"
+                    ? result.net.toFixed(2)
+                    : result.gross.toFixed(2)}{" "}
                   <span className="text-2xl text-emerald-500 font-bold">€</span>
                 </div>
                 <div className="text-gray-600 font-medium mt-1 text-sm">
@@ -285,15 +287,31 @@ export default function CalculatorWidget() {
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
-                
+
                 <div className="w-full md:w-1/2 space-y-2">
                   {chartData.map((entry, idx) => (
-                    <div key={idx} className="flex justify-between items-center text-xs font-medium text-gray-700">
+                    <div
+                      key={idx}
+                      className="flex justify-between items-center text-xs font-medium text-gray-700"
+                    >
                       <span className="flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color }}></span>
+                        <span
+                          className="w-2.5 h-2.5 rounded-full"
+                          style={{ backgroundColor: entry.color }}
+                        ></span>
                         {entry.name}
                       </span>
-                      <span className="font-bold text-gray-900">{((entry.value / (result.gross + (showEmployerCost ? result.employerTaxes.total : 0))) * 100).toFixed(1)}%</span>
+                      <span className="font-bold text-gray-900">
+                        {(
+                          (entry.value /
+                            (result.gross +
+                              (showEmployerCost
+                                ? result.employerTaxes.total
+                                : 0))) *
+                          100
+                        ).toFixed(1)}
+                        %
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -301,14 +319,18 @@ export default function CalculatorWidget() {
 
               <div className="space-y-2.5 text-sm pt-2 border-t border-gray-300">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-700 font-medium">Брутна заплата:</span>
+                  <span className="text-gray-700 font-medium">
+                    Брутна заплата:
+                  </span>
                   <span className="font-bold text-gray-900">
                     {result.gross.toFixed(2)} €
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center mt-1">
-                  <span className="text-gray-700 font-medium">Общо осигуровки:</span>
+                  <span className="text-gray-700 font-medium">
+                    Общо осигуровки:
+                  </span>
                   <span className="font-bold text-orange-600">
                     -{" "}
                     {(
@@ -321,7 +343,9 @@ export default function CalculatorWidget() {
                 </div>
 
                 <div className="flex justify-between items-center pt-1">
-                  <span className="text-gray-700 font-medium">Данък ДОД (10%):</span>
+                  <span className="text-gray-700 font-medium">
+                    Данък ДОД (10%):
+                  </span>
                   <span className="font-bold text-red-600">
                     - {result.employeeTaxes.incomeTax.toFixed(2)} €
                   </span>
@@ -359,7 +383,11 @@ export default function CalculatorWidget() {
                 <Lightbulb size={18} className="text-amber-500" />
                 Експертен анализ и данъчни особености
               </span>
-              {showInsights ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+              {showInsights ? (
+                <ChevronUp size={18} />
+              ) : (
+                <ChevronDown size={18} />
+              )}
             </button>
 
             {showInsights && (
@@ -370,9 +398,15 @@ export default function CalculatorWidget() {
                     className="flex items-start gap-3 bg-white p-4 rounded-xl border border-gray-200 shadow-sm"
                   >
                     <div className="mt-0.5 flex-shrink-0">
-                      {insight.type === "success" && <CheckCircle2 size={18} className="text-emerald-600" />}
-                      {insight.type === "warning" && <AlertCircle size={18} className="text-amber-500" />}
-                      {insight.type === "info" && <Info size={18} className="text-blue-600" />}
+                      {insight.type === "success" && (
+                        <CheckCircle2 size={18} className="text-emerald-600" />
+                      )}
+                      {insight.type === "warning" && (
+                        <AlertCircle size={18} className="text-amber-500" />
+                      )}
+                      {insight.type === "info" && (
+                        <Info size={18} className="text-blue-600" />
+                      )}
                     </div>
                     <div>
                       <h4 className="text-sm font-bold text-gray-900 mb-1">
@@ -391,10 +425,14 @@ export default function CalculatorWidget() {
       )}
 
       {/* Декларация за поверителност за успокоение на параноята */}
-      <div className="bg-slate-100 py-3 px-6 text-xs text-slate-600 flex items-center justify-center gap-2 text-center border-t border-slate-200">
-        <ShieldCheck size={16} className="text-slate-500" />
-        <p>
-          <strong>100% Поверителност:</strong> Изчисленията се извършват локално във вашия браузър. Ние не съхраняваме вашия IP адрес и въведени суми.
+      <div className="bg-slate-100 py-4 px-4 sm:px-6 text-xs text-slate-600 text-center border-t border-slate-200">
+        <p className="leading-relaxed">
+          <span className="inline-flex align-middle mr-1.5 -mt-0.5">
+            <ShieldCheck size={16} className="text-slate-500" />
+          </span>
+          <strong>100% Поверителност:</strong> Изчисленията се извършват изцяло
+          във вашия браузър. Не съхраняваме вашия IP адрес или въведените от вас
+          суми.
         </p>
       </div>
     </div>
